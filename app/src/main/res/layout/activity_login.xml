@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/usafa_blue"
+    tools:context=".LoginActivity">
+
+    <TextView
+        android:id="@+id/tv_titulo_app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_titulo"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.100000024" />
+
+    <EditText
+        android:id="@+id/etx_usuario"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/round_backgrd_fresh"
+        android:ems="10"
+        android:hint="@string/usuario"
+        android:inputType="textPersonName"
+        android:padding="12dp"
+        android:textColor="@color/charlestone_grey"
+        app:layout_constraintEnd_toEndOf="@+id/tv_titulo_app"
+        app:layout_constraintStart_toStartOf="@+id/tv_titulo_app"
+        app:layout_constraintTop_toBottomOf="@+id/tv_titulo_app" />
+
+    <EditText
+        android:id="@+id/etx_senha"
+        android:background="@drawable/round_backgrd_fresh"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:padding="12dp"
+        android:textColor="@color/charlestone_grey"
+        android:ems="10"
+        android:hint="@string/senha"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@+id/etx_usuario"
+        app:layout_constraintStart_toStartOf="@+id/etx_usuario"
+        app:layout_constraintTop_toBottomOf="@+id/etx_usuario" />
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/round_backgrd_white"
+        android:text="@string/login"
+        android:textColor="@color/black_olive"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="@+id/etx_senha"
+        app:layout_constraintTop_toBottomOf="@+id/etx_senha" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
