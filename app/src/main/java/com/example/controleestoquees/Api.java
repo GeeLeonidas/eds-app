@@ -1,10 +1,6 @@
 package com.example.controleestoquees;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -13,27 +9,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-public class LoginActivity extends AppCompatActivity {
-    private Button btnLogin;
+import java.net.URI;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        btnLogin = findViewById(R.id.btn_login);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("Olá mundo!");
-                testarApi();
-            }
-        });
+public class Api {
 
-        //testarApi();
-    }
 
-    public void testarApi(){
+
+    /*public void testarApi(){
         System.out.println("Iniciando chamada para a Api");
         //CronetEngine.Builder myBuilder = new CronetEngine.Builder(context);
         //CronetEngine cronetEngine = myBuilder.build();
@@ -52,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
                         //textView.setText("Response is: "+ response.substring(0,500));
-                        System.out.println("olá " + response.substring(0,500));
+                        System.out.println("olá");
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -65,5 +48,5 @@ public class LoginActivity extends AppCompatActivity {
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
 
-    }
+    }*/
 }
