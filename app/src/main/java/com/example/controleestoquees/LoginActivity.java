@@ -1,5 +1,6 @@
 package com.example.controleestoquees;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.AsyncTask;
@@ -7,17 +8,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
 import org.json.JSONObject;
 
 import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+
+import com.google.gson.Gson;
+
 
 public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
@@ -32,7 +32,34 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("Olá mundo!");
-                testarApi();
+                //testarApi();
+
+                Api.login("erick", "111111", new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            // Faça algo com a resposta aqui
+                            System.out.println("Tudo certo");
+                            System.out.println(response.body());
+                            Gson gson = new Gson();
+                            String responseBody = response.body().string();
+                            TokenResponse tokenResponse = gson.fromJson(responseBody, TokenResponse.class);
+                            String token = tokenResponse.getToken();
+                            // Extrair o token do objeto TokenResponse
+                            // E armazená-lo em uma string
+                            Api.setToken(token);
+                            System.out.println("Token: " + Api.getToken());
+                        } else {
+                            // Tratar o erro de resposta
+                            System.out.println("Tudo errado");
+                        }
+                    }
+                });
             }
         });
 
@@ -119,6 +146,18 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             // Use a resposta aqui
             System.out.println(result);
+        }
+    }
+
+    public class TokenResponse {
+        private String token;
+
+        public String getToken() {
+            return token;
+        }
+
+        public void setToken(String token) {
+            this.token = token;
         }
     }
 }
