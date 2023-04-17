@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -21,12 +24,15 @@ import com.google.gson.Gson;
 
 public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
+    private EditText etxUsuario, etxSenha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         btnLogin = findViewById(R.id.btn_login);
+        etxUsuario = (EditText) findViewById(R.id.etx_usuario);
+        etxSenha = (EditText) findViewById(R.id.etx_senha);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,32 +40,45 @@ public class LoginActivity extends AppCompatActivity {
                 System.out.println("Olá mundo!");
                 //testarApi();
 
-                Api.login("erick", "111111", new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        e.printStackTrace();
-                    }
+                String usuario = etxUsuario.getText().toString();
+                String senha = etxSenha.getText().toString();
 
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()) {
-                            // Faça algo com a resposta aqui
-                            System.out.println("Tudo certo");
-                            System.out.println(response.body());
-                            Gson gson = new Gson();
-                            String responseBody = response.body().string();
-                            TokenResponse tokenResponse = gson.fromJson(responseBody, TokenResponse.class);
-                            String token = tokenResponse.getToken();
-                            // Extrair o token do objeto TokenResponse
-                            // E armazená-lo em uma string
-                            Api.setToken(token);
-                            System.out.println("Token: " + Api.getToken());
-                        } else {
-                            // Tratar o erro de resposta
-                            System.out.println("Tudo errado");
+                if(usuario.trim().equals("")){
+                   Toast toast = Toast.makeText(getApplicationContext(), "Por favor, insira nome de usuário", Toast.LENGTH_LONG);
+                   toast.setGravity(Gravity.NO_GRAVITY, 0, 0);
+                   toast.show();
+                }else if(senha.trim().equals("")){
+                    Toast toast = Toast.makeText(getApplicationContext(), "Por favor, insira uma senha", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.NO_GRAVITY, 0, 0);
+                    toast.show();
+                }else {
+                    Api.login(usuario, senha, new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            e.printStackTrace();
                         }
-                    }
-                });
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.isSuccessful()) {
+                                // Faça algo com a resposta aqui
+                                System.out.println("Tudo certo");
+                                System.out.println(response.body());
+                                Gson gson = new Gson();
+                                String responseBody = response.body().string();
+                                TokenResponse tokenResponse = gson.fromJson(responseBody, TokenResponse.class);
+                                String token = tokenResponse.getToken();
+                                // Extrair o token do objeto TokenResponse
+                                // E armazená-lo em uma string
+                                Api.setToken(token);
+                                System.out.println("Token: " + Api.getToken());
+                            } else {
+                                // Tratar o erro de resposta
+                                System.out.println("Tudo errado");
+                            }
+                        }
+                    });
+                }
             }
         });
 

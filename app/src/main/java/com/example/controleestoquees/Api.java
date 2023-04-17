@@ -30,7 +30,8 @@ public class Api {
     }
 
     public static void login(String username, String password, Callback callback){
-        String url = "http://192.168.0.7:8000" + "/user/login";
+        //String url = "http://192.168.0.7:8000" + "/user/login";
+        String url = "http://192.168.0.179:8000" + "/user/login";
 
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(mediaType, "{\"username\":\"" + username + "\",\"password\":\"" + password + "\"}");
