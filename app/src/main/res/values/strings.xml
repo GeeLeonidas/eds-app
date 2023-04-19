@@ -5,4 +5,5 @@
     <string name="senha">Senha</string>
     <string name="login">Login</string>
     <string name="buscar">Buscar</string>
+    <string name="novo">Novo</string>
 </resources>

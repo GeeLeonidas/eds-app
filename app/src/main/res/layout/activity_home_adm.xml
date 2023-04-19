@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/fresh_air"
-    tools:context=".HomeFuncionarioActivity">
+    tools:context=".HomeAdmActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_horizontal1"
@@ -51,9 +51,42 @@
         android:inputType="text"
         android:padding="12dp"
         app:layout_constraintBottom_toBottomOf="@+id/view"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical2"
-        app:layout_constraintStart_toEndOf="@+id/guideline_vertical1"
+        app:layout_constraintEnd_toStartOf="@+id/btn_usuario"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_weight="0.40"
+        app:layout_constraintStart_toEndOf="@+id/btn_novo"
         app:layout_constraintTop_toTopOf="@+id/view" />
+
+    <Button
+        android:id="@+id/btn_novo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_backgrd_dollar"
+        android:text="@string/novo"
+        android:textColor="@color/white"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="@+id/etx_buscar"
+        app:layout_constraintEnd_toStartOf="@+id/etx_buscar"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintHorizontal_weight="0.25"
+        app:layout_constraintStart_toEndOf="@+id/guideline_vertical1"
+        app:layout_constraintTop_toTopOf="@+id/etx_buscar" />
+
+    <Button
+        android:id="@+id/btn_usuario"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_backgrd_dollar"
+        android:text="@string/usuario"
+        android:textColor="@color/white"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="@+id/etx_buscar"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_weight="0.25"
+        app:layout_constraintStart_toEndOf="@+id/etx_buscar"
+        app:layout_constraintTop_toTopOf="@+id/etx_buscar" />
 
     <ListView
         android:id="@+id/list_produtos"

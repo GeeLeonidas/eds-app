@@ -15,6 +15,9 @@
         android:theme="@style/Theme.ControleEstoqueEs"
         tools:targetApi="31">
         <activity
+            android:name=".HomeAdmActivity"
+            android:exported="false" />
+        <activity
             android:name=".HomeFuncionarioActivity"
             android:exported="false" />
         <activity
