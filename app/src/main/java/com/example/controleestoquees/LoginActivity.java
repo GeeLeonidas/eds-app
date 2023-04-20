@@ -3,6 +3,7 @@ package com.example.controleestoquees;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btn_login);
         etxUsuario = (EditText) findViewById(R.id.etx_usuario);
         etxSenha = (EditText) findViewById(R.id.etx_senha);
+        Context ctx = this;
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +80,13 @@ public class LoginActivity extends AppCompatActivity {
                                 String cargo = Api.getCargoFromToken(token);
                                 System.out.println("Cargo: " + cargo); // apagar
 
+                                Intent intent;
+                                if (cargo.equals("administrador")) {
+                                    intent = new Intent(ctx, HomeAdmActivity.class);
+                                } else {
+                                    intent = new Intent(ctx, HomeFuncionarioActivity.class);
+                                }
+                                startActivity(intent);
                             } else {
                                 // Tratar o erro de resposta
                                 System.out.println("Tudo errado: " + response);
