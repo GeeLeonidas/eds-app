@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                                 System.out.println("Token: " + Api.getToken());
                             } else {
                                 // Tratar o erro de resposta
-                                System.out.println("Tudo errado");
+                                System.out.println("Tudo errado: " + response);
                             }
                         }
                     });
@@ -157,8 +157,9 @@ public class LoginActivity extends AppCompatActivity {
 
         try {
             //String response = Api.get("https://www.example.com");
-            new HttpTask().execute("http://192.168.0.7:8000");
-            System.out.println("Tudo certo");
+            AsyncTask<String, Void, String> resultTask = new HttpTask().execute(Api.getBaseUrl());
+            String result = resultTask.get();
+            System.out.println("Tudo certo: " + result);
             // Faça algo com a resposta do servidor
         } catch (Exception e) {
             // Trate exceções de rede
