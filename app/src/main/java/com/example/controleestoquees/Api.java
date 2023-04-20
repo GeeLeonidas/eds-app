@@ -2,6 +2,10 @@ package com.example.controleestoquees;
 
 import android.widget.TextView;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonWriter;
+
+import java.io.StringWriter;
 import java.net.URI;
 
 
@@ -21,7 +25,7 @@ public class Api {
 
     private static String token = "";
 
-    private static String BASE_URL = "http://192.168.0.7:8000/";
+    private static String BASE_URL = "http://10.0.2.2:8000/";
 
     /*public static String get(String url) throws IOException {
         Request request = new Request.Builder()
@@ -51,12 +55,49 @@ public class Api {
         call.enqueue(callback);
     }
 
-    public static void login(String username, String password, Callback callback){
-        //String url = "http://192.168.0.7:8000" + "/user/login";
-        String url = BASE_URL + "user/login";
+    public static void register(String username, String name, String password, String cargo, Callback callback) {
+        String url = BASE_URL + "user/create";
+
+        StringWriter stringWriter = new StringWriter();
+        try {
+            new JsonWriter(stringWriter).beginObject().
+                    name("username").value(username).
+                    name("name").value(name).
+                    name("password").value(password).
+                    name("cargo").value(cargo).
+                    endObject().flush();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        String json = stringWriter.toString();
 
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, "{\"username\":\"" + username + "\",\"password\":\"" + password + "\"}");
+        RequestBody body = RequestBody.create(mediaType, json);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(callback);
+    }
+
+    public static void login(String username, String password, Callback callback){
+        String url = BASE_URL + "user/login";
+
+        StringWriter stringWriter = new StringWriter();
+        try {
+            new JsonWriter(stringWriter).beginObject().
+                    name("username").value(username).
+                    name("password").value(password).
+                    endObject().flush();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        String json = stringWriter.toString();
+
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, json);
 
         Request request = new Request.Builder()
                 .url(url)
@@ -72,5 +113,9 @@ public class Api {
 
     public static String getToken(){
         return Api.token;
+    }
+
+    public static String getBaseUrl() {
+        return BASE_URL;
     }
 }
