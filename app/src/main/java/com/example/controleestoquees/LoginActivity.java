@@ -3,6 +3,7 @@ package com.example.controleestoquees;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -72,6 +73,11 @@ public class LoginActivity extends AppCompatActivity {
                                 // E armazená-lo em uma string
                                 Api.setToken(token);
                                 System.out.println("Token: " + Api.getToken());
+
+                                // pegando cargo do funcionario e abrindo tela home apropriada
+                                String cargo = Api.getCargoFromToken(token);
+                                System.out.println("Cargo: " + cargo); // apagar
+
                             } else {
                                 // Tratar o erro de resposta
                                 System.out.println("Tudo errado");
