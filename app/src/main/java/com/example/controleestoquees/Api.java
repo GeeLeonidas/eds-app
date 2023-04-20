@@ -37,7 +37,7 @@ public class Api {
         }
     }*/
 
-    public static void get(String route, String token, Callback callback) {
+    public static void get(String route, Callback callback) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
@@ -48,7 +48,7 @@ public class Api {
 
         Request request = new Request.Builder()
                 .url(url)
-                .addHeader("Authorization", "Bearer " + token) // Adicionar o token na autorização
+                .addHeader("Authorization", "Bearer " + Api.token) // Adicionar o token na autorização
                 .build();
 
         Call call = client.newCall(request);
@@ -107,8 +107,8 @@ public class Api {
         client.newCall(request).enqueue(callback);
     }
 
-    public static String getCargoFromToken(String token){
-        String[] parts = token.split("[.]");
+    public static String getCargoFromToken(){
+        String[] parts = Api.token.split("[.]");
         try{
             byte[] bytePart = parts[1].getBytes("UTF-8");
             String decodedPart = new String(java.util.Base64.getUrlDecoder().decode(bytePart), "UTF-8");

@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                                 System.out.println("Token: " + Api.getToken());
 
                                 // pegando cargo do funcionario e abrindo tela home apropriada
-                                String cargo = Api.getCargoFromToken(token);
+                                String cargo = Api.getCargoFromToken();
                                 System.out.println("Cargo: " + cargo); // apagar
 
                                 Intent intent;
