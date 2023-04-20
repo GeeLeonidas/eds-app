@@ -107,6 +107,31 @@ public class Api {
         client.newCall(request).enqueue(callback);
     }
 
+    public static String getCargoFromToken(String token){
+        String[] parts = token.split("[.]");
+        try{
+            byte[] bytePart = parts[1].getBytes("UTF-8");
+            String decodedPart = new String(java.util.Base64.getUrlDecoder().decode(bytePart), "UTF-8");
+            String[] temp = decodedPart.split(",");
+            String[] temp2 = null;
+            for(String t : temp){
+                if(t.contains("cargo")){
+                    temp2 = t.split(":");
+                    break;
+                }
+            }
+
+            if(temp2 != null){
+                String cargo = temp2[1].replaceAll("\""," ").trim();
+                return cargo;
+            }else{
+                throw new RuntimeException("não foi possivel obter cargo");
+            }
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void setToken(String token){
         Api.token = token;
     }
