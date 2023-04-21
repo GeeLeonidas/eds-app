@@ -55,7 +55,36 @@ public class Api {
         call.enqueue(callback);
     }
 
-    public static void register(String username, String name, String password, String cargo, Callback callback) {
+    public static void registerProduct(String name, int countStock, int countStockAlert, int countStand, int countStandAlert, Callback callback) {
+        String url = BASE_URL + "api/item";
+
+        StringWriter stringWriter = new StringWriter();
+        try {
+            new JsonWriter(stringWriter).beginObject().
+                    name("nome").value(name).
+                    name("qtd").value(countStock).
+                    name("qtd_alert_stock").value(countStockAlert).
+                    name("qtd_alert_stand").value(countStandAlert).
+                    name("qtd_stand").value(countStand).
+                    endObject().flush();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        String json = stringWriter.toString();
+
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, json);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + Api.token)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(callback);
+    }
+
+    public static void registerUser(String username, String name, String password, String role, Callback callback) {
         String url = BASE_URL + "user/create";
 
         StringWriter stringWriter = new StringWriter();
@@ -64,7 +93,7 @@ public class Api {
                     name("username").value(username).
                     name("name").value(name).
                     name("password").value(password).
-                    name("cargo").value(cargo).
+                    name("cargo").value(role).
                     endObject().flush();
         } catch (IOException ex) {
             ex.printStackTrace();
