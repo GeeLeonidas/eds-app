@@ -1,5 +1,6 @@
 package com.example.controleestoquees;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -15,7 +16,7 @@ public class HomeFuncionarioActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_funcionario);
         etxBuscar = findViewById(R.id.etx_buscar);
-        Context ctx = this;
+        Activity activity = this;
 
         etxBuscar.addTextChangedListener(new SearchWatcher(() -> {
             System.out.println("Usuário parou de digitar!");

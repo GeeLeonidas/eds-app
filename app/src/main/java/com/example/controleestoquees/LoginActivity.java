@@ -3,6 +3,7 @@ package com.example.controleestoquees;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -35,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btn_login);
         etxUsuario = (EditText) findViewById(R.id.etx_usuario);
         etxSenha = (EditText) findViewById(R.id.etx_senha);
-        Context ctx = this;
+        Activity activity = this;
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,9 +85,9 @@ public class LoginActivity extends AppCompatActivity {
 
                                 Intent intent;
                                 if (cargo.equals("administrador")) {
-                                    intent = new Intent(ctx, HomeAdmActivity.class);
+                                    intent = new Intent(activity, HomeAdmActivity.class);
                                 } else {
-                                    intent = new Intent(ctx, HomeFuncionarioActivity.class);
+                                    intent = new Intent(activity, HomeFuncionarioActivity.class);
                                 }
                                 startActivity(intent);
                             } else {
