@@ -70,6 +70,7 @@ public class CadastroProdutoActivity extends AppCompatActivity {
                 etxQtdPrateleira.clearFocus();
                 etxAlertQtdPrateleira.clearFocus();
                 System.out.println("Registrando produto " + name);
+                final Boolean[] finished = {false, false};
                 Api.registerProduct(
                         name,
                         Integer.parseInt(countStock),
@@ -84,18 +85,36 @@ public class CadastroProdutoActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                                finished[0] = true;
                                 if (response.isSuccessful()) {
-                                    etxNomeProd.getText().clear();
-                                    etxQtdStock.getText().clear();
-                                    etxQtdAlertStock.getText().clear();
-                                    etxQtdPrateleira.getText().clear();
-                                    etxAlertQtdPrateleira.getText().clear();
+                                    finished[1] = true;
                                 } else {
                                     System.out.println("Tudo errado: " + response);
                                 }
                             }
                         }
                 );
+                while (!finished[0]) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                if (finished[1]) { // Success
+                    etxNomeProd.getText().clear();
+                    etxQtdStock.getText().clear();
+                    etxQtdAlertStock.getText().clear();
+                    etxQtdPrateleira.getText().clear();
+                    etxAlertQtdPrateleira.getText().clear();
+                    Toast successToast = Toast.makeText(activity, "Produto \"" + name + "\" criado com sucesso!", Toast.LENGTH_LONG);
+                    successToast.setGravity(Gravity.NO_GRAVITY, 0, 0);
+                    successToast.show();
+                } else { // Error
+                    Toast successToast = Toast.makeText(activity, "Falha na criação do produto", Toast.LENGTH_LONG);
+                    successToast.setGravity(Gravity.NO_GRAVITY, 0, 0);
+                    successToast.show();
+                }
                 return;
             }
             errorToast.setGravity(Gravity.NO_GRAVITY, 0, 0);
