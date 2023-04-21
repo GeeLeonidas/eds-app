@@ -55,6 +55,8 @@ public class LoginActivity extends AppCompatActivity {
                     toast.setGravity(Gravity.NO_GRAVITY, 0, 0);
                     toast.show();
                 }else {
+                    etxUsuario.clearFocus();
+                    etxSenha.clearFocus();
                     Api.login(usuario, senha, new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
