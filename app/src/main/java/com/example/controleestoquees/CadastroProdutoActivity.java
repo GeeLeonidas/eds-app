@@ -85,11 +85,6 @@ public class CadastroProdutoActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                                 if (response.isSuccessful()) {
-                                    activity.runOnUiThread(() -> {
-                                        Toast successToast = Toast.makeText(activity, "Produto criado com sucesso!", Toast.LENGTH_LONG);
-                                        successToast.setGravity(Gravity.NO_GRAVITY, 0, 0);
-                                        successToast.show();
-                                    });
                                     etxNomeProd.getText().clear();
                                     etxQtdStock.getText().clear();
                                     etxQtdAlertStock.getText().clear();
