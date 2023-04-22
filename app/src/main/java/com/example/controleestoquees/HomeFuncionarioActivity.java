@@ -21,5 +21,7 @@ public class HomeFuncionarioActivity extends AppCompatActivity {
         etxBuscar.addTextChangedListener(new SearchWatcher(() -> {
             System.out.println("Usuário parou de digitar!");
         }));
+
+        Api.updateItemArray();
     }
 }

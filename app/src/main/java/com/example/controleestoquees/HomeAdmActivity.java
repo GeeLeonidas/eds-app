@@ -1,11 +1,12 @@
 package com.example.controleestoquees;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,6 +14,8 @@ public class HomeAdmActivity extends AppCompatActivity {
 
     private Button btnNovo, btnUsuario;
     private EditText etxBuscar;
+    private ListView listProdutos;
+    private ArrayAdapter<ProductItem> itemArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +24,13 @@ public class HomeAdmActivity extends AppCompatActivity {
         btnNovo = findViewById(R.id.btn_novo);
         btnUsuario = findViewById(R.id.btn_usuario);
         etxBuscar = findViewById(R.id.etx_buscar);
+        listProdutos = findViewById(R.id.list_produtos);
 
         Activity activity = this;
+
+        itemArrayAdapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, Api.getItemArray());
+        listProdutos.setAdapter(itemArrayAdapter);
+        listProdutos.setTextFilterEnabled(true);
 
         btnUsuario.setOnClickListener(view -> {
             System.out.println("Indo para a tela de adição dos usuários!");
@@ -37,5 +45,8 @@ public class HomeAdmActivity extends AppCompatActivity {
         etxBuscar.addTextChangedListener(new SearchWatcher(() -> {
             System.out.println("Usuário parou de digitar!");
         }));
+
+        Api.updateItemArray();
+        itemArrayAdapter.notifyDataSetChanged();
     }
 }

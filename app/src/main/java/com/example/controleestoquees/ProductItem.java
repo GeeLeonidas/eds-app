@@ -1,5 +1,7 @@
 package com.example.controleestoquees;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
@@ -31,5 +33,13 @@ public class ProductItem {
     public static ProductItem fromJson(String json) {
         Gson gson = new Gson();
         return gson.fromJson(json, ProductItem.class);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return this.name +
+                "\nEstoque: " + countStock + '/' + countStockAlert +
+                "\nPrateleiras: " + countStand + '/' + countStandAlert;
     }
 }

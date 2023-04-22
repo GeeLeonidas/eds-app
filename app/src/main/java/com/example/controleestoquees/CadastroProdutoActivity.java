@@ -1,17 +1,15 @@
 package com.example.controleestoquees;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
 import android.view.Gravity;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 
@@ -70,14 +68,15 @@ public class CadastroProdutoActivity extends AppCompatActivity {
                 etxQtdPrateleira.clearFocus();
                 etxAlertQtdPrateleira.clearFocus();
                 System.out.println("Registrando produto " + name);
-                final Boolean[] finished = {false, false};
+                final boolean[] wasSuccessful = {false};
                 Api.registerProduct(
-                        name,
-                        Integer.parseInt(countStock),
-                        Integer.parseInt(countStockAlert),
-                        Integer.parseInt(countStand),
-                        Integer.parseInt(countStandAlert),
-                        new Callback() {
+                        new ProductItem(
+                                name,
+                                Integer.parseInt(countStock),
+                                Integer.parseInt(countStockAlert),
+                                Integer.parseInt(countStand),
+                                Integer.parseInt(countStandAlert)
+                        ), new Callback() {
                             @Override
                             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                                 e.printStackTrace();
@@ -85,23 +84,15 @@ public class CadastroProdutoActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                                finished[0] = true;
                                 if (response.isSuccessful()) {
-                                    finished[1] = true;
+                                    wasSuccessful[0] = true;
                                 } else {
                                     System.out.println("Tudo errado: " + response);
                                 }
                             }
                         }
                 );
-                while (!finished[0]) {
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                if (finished[1]) { // Success
+                if (wasSuccessful[0]) { // Success
                     etxNomeProd.getText().clear();
                     etxQtdStock.getText().clear();
                     etxQtdAlertStock.getText().clear();

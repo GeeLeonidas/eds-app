@@ -1,13 +1,16 @@
 package com.example.controleestoquees;
 
-import android.widget.TextView;
+import android.os.SystemClock;
 
-import com.google.gson.GsonBuilder;
+import androidx.annotation.NonNull;
+
+import com.google.gson.Gson;
 import com.google.gson.stream.JsonWriter;
 
+import java.io.IOException;
 import java.io.StringWriter;
-import java.net.URI;
-
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -17,15 +20,14 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-
 public class Api {
     private static OkHttpClient client = new OkHttpClient();
 
     private static String token = "";
 
     private static String BASE_URL = "http://10.0.2.2:8000/";
+
+    private static ProductItem[] itemArray = {};
 
     /*public static String get(String url) throws IOException {
         Request request = new Request.Builder()
@@ -55,25 +57,11 @@ public class Api {
         call.enqueue(callback);
     }
 
-    public static void registerProduct(String name, int countStock, int countStockAlert, int countStand, int countStandAlert, Callback callback) {
+    public static void registerProduct(ProductItem productItem, Callback callback) {
         String url = BASE_URL + "api/item";
 
-        StringWriter stringWriter = new StringWriter();
-        try {
-            new JsonWriter(stringWriter).beginObject().
-                    name("nome").value(name).
-                    name("qtd").value(countStock).
-                    name("qtd_alert_stock").value(countStockAlert).
-                    name("qtd_alert_stand").value(countStandAlert).
-                    name("qtd_stand").value(countStand).
-                    endObject().flush();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        String json = stringWriter.toString();
-
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, json);
+        RequestBody body = RequestBody.create(mediaType, productItem.toJson());
 
         Request request = new Request.Builder()
                 .url(url)
@@ -136,6 +124,34 @@ public class Api {
         client.newCall(request).enqueue(callback);
     }
 
+    public static void updateItemArray()  {
+        Api.get("api/itens", new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    try {
+                        String responseBody = response.body().string();
+                        if (!responseBody.isEmpty()) {
+                            Gson gson = new Gson();
+                            itemArray = gson.fromJson(responseBody, ProductItem[].class);
+                        } else {
+                            System.out.println("Body vazio");
+                        }
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    System.out.println("Tudo errado: " + response);
+                }
+            }
+        });
+    }
+
     public static String getCargoFromToken(){
         String[] parts = Api.token.split("[.]");
         try{
@@ -171,5 +187,9 @@ public class Api {
 
     public static String getBaseUrl() {
         return BASE_URL;
+    }
+
+    public static ProductItem[] getItemArray() {
+        return itemArray;
     }
 }
