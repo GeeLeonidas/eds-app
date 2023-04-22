@@ -37,10 +37,14 @@ public class HomeFuncionarioActivity extends AppCompatActivity {
             System.out.println("Usuário clicou no item " + id);
         });
 
-        Api.updateItemArray();
-
-        itemArrayAdapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, Api.getItemArray());
-        listProdutos.setAdapter(itemArrayAdapter);
+        new Thread(() -> {
+            Api.updateItemArray();
+            handler.post(() -> {
+                itemArrayAdapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, Api.getItemArray());
+                listProdutos.setAdapter(itemArrayAdapter);
+                itemArrayAdapter.notifyDataSetChanged();
+            });
+        }).start();
     }
 
     @Override
@@ -53,8 +57,10 @@ public class HomeFuncionarioActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (!activity.isDestroyed() && !activity.isActivityTransitionRunning()) {
-                    Api.updateItemArray();
-                    itemArrayAdapter.notifyDataSetChanged();
+                    new Thread(() -> {
+                        Api.updateItemArray();
+                        handler.post(() -> itemArrayAdapter.notifyDataSetChanged());
+                    }).start();
                 }
 
                 if (!activity.isDestroyed() && !activity.isActivityTransitionRunning())

@@ -1,7 +1,5 @@
 package com.example.controleestoquees;
 
-import android.os.SystemClock;
-
 import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
@@ -28,6 +26,8 @@ public class Api {
     private static String BASE_URL = "http://10.0.2.2:8000/";
 
     private static ProductItem[] itemArray = {};
+    private static Semaphore updateSemaphore = new Semaphore(1);
+
 
     /*public static String get(String url) throws IOException {
         Request request = new Request.Builder()
@@ -125,12 +125,14 @@ public class Api {
     }
 
     public static void updateItemArray()  {
-        Semaphore semaphore = new Semaphore(1);
-        semaphore.acquireUninterruptibly();
+        if (updateSemaphore.hasQueuedThreads())
+            return;
+        updateSemaphore.acquireUninterruptibly();
         Api.get("api/itens", new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 e.printStackTrace();
+                updateSemaphore.release();
             }
 
             @Override
@@ -150,11 +152,11 @@ public class Api {
                 } else {
                     System.out.println("Tudo errado: " + response);
                 }
-                semaphore.release();
+                updateSemaphore.release();
             }
         });
-        semaphore.acquireUninterruptibly();
-        semaphore.release();
+        updateSemaphore.acquireUninterruptibly();
+        updateSemaphore.release();
     }
 
     public static String getCargoFromToken(){

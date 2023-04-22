@@ -101,10 +101,13 @@ public class LoginActivity extends AppCompatActivity {
                 }else {
                     etxUsuario.clearFocus();
                     etxSenha.clearFocus();
+                    Semaphore loginSemaphore = new Semaphore(1);
+                    loginSemaphore.acquireUninterruptibly();
                     Api.login(usuario, senha, new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
                             e.printStackTrace();
+                            loginSemaphore.release();
                         }
 
                         @Override
@@ -141,8 +144,11 @@ public class LoginActivity extends AppCompatActivity {
                                 // Tratar o erro de resposta
                                 System.out.println("Tudo errado: " + response);
                             }
+                            loginSemaphore.release();
                         }
                     });
+                    loginSemaphore.acquireUninterruptibly();
+                    loginSemaphore.release();
 
                     /*Api.get("api/teste", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjN2RjNGFjMS1kY2I1LTExZWQtODZkNC1kODVlZDNmMDg0NDciLCJjYXJnbyI6ImdlcmVudGUiLCJpYXQiOjE2ODE4NjkwMjYsImV4cCI6MTY4MTkxMjIyNn0.Sz20B5G8swNQzE8dOmQhp66PCT1vHfvfV7HXRc1TTFA", new Callback() {
                         @Override
