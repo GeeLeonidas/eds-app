@@ -2,6 +2,7 @@ package com.example.controleestoquees;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
@@ -45,6 +46,10 @@ public class HomeFuncionarioActivity extends AppCompatActivity {
                 itemArrayAdapter.notifyDataSetChanged();
             });
         }).start();
+
+        // Inicia o serviço de notificações
+        Intent intent = new Intent(activity, NotificationService.class);
+        startService(intent);
     }
 
     @Override

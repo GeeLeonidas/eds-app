@@ -62,6 +62,10 @@ public class HomeAdmActivity extends AppCompatActivity {
                 itemArrayAdapter.notifyDataSetChanged();
             });
         }).start();
+
+        // Inicia o serviço de notificações
+        Intent intent = new Intent(activity, NotificationService.class);
+        startService(intent);
     }
 
     @Override

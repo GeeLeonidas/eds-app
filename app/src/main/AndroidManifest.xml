@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ControleEstoqueEs"
         tools:targetApi="31">
+        <service
+            android:name=".NotificationService"
+            android:exported="false" />
         <activity
             android:name=".CadastroProdutoActivity"
             android:exported="false" />
