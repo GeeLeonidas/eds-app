@@ -61,12 +61,12 @@ public class HomeAdmActivity extends AppCompatActivity {
         Runnable update = new Runnable() {
             @Override
             public void run() {
-                if (!activity.isDestroyed()) {
+                if (!activity.isDestroyed() && !activity.isActivityTransitionRunning()) {
                     Api.updateItemArray();
                     itemArrayAdapter.notifyDataSetChanged();
                 }
 
-                if (!activity.isDestroyed())
+                if (!activity.isDestroyed() && !activity.isActivityTransitionRunning())
                     handler.postDelayed(this, 30_000);
             }
         };
