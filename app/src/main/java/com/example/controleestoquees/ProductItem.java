@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Locale;
+
 public class ProductItem {
     @SerializedName("nome")
     public final String name;
@@ -38,8 +40,6 @@ public class ProductItem {
     @NonNull
     @Override
     public String toString() {
-        return this.name +
-                "\nEstoque: " + countStock + '/' + countStockAlert +
-                "\nPrateleiras: " + countStand + '/' + countStandAlert;
+        return this.name;
     }
 }
