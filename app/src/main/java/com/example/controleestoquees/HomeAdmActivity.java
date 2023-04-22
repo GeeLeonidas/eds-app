@@ -3,11 +3,13 @@ package com.example.controleestoquees;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class HomeAdmActivity extends AppCompatActivity {
@@ -28,10 +30,6 @@ public class HomeAdmActivity extends AppCompatActivity {
 
         Activity activity = this;
 
-        itemArrayAdapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, Api.getItemArray());
-        listProdutos.setAdapter(itemArrayAdapter);
-        listProdutos.setTextFilterEnabled(true);
-
         btnUsuario.setOnClickListener(view -> {
             System.out.println("Indo para a tela de adição dos usuários!");
         });
@@ -47,6 +45,14 @@ public class HomeAdmActivity extends AppCompatActivity {
         }));
 
         Api.updateItemArray();
+
+        itemArrayAdapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, Api.getItemArray());
+        listProdutos.setAdapter(itemArrayAdapter);
+    }
+
+    @Override
+    public void onPostCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        super.onPostCreate(savedInstanceState, persistentState);
         itemArrayAdapter.notifyDataSetChanged();
     }
 }
