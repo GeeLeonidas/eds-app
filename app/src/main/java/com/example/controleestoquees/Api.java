@@ -159,6 +159,27 @@ public class Api {
         updateSemaphore.release();
     }
 
+    public static boolean checkAuth() {
+        boolean[] wasSuccessful = {false};
+        Semaphore semaphore = new Semaphore(1);
+        semaphore.acquireUninterruptibly();
+        Api.get("api/teste", new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                wasSuccessful[0] = response.isSuccessful();
+                semaphore.release();
+            }
+        });
+        semaphore.acquireUninterruptibly();
+        semaphore.release();
+        return wasSuccessful[0];
+    }
+
     public static String getCargoFromToken(){
         String[] parts = Api.token.split("[.]");
         try{

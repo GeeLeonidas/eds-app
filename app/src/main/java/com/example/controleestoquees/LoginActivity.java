@@ -46,24 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         if (!prefToken.isEmpty()) {
             System.out.println("Token armazenado: " + prefToken);
             Api.setToken(prefToken);
-            boolean[] wasSuccessful = {false};
-            Semaphore semaphore = new Semaphore(1);
-            semaphore.acquireUninterruptibly();
-            Api.get("api/teste", new Callback() {
-                @Override
-                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    e.printStackTrace();
-                }
-
-                @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response) {
-                    wasSuccessful[0] = response.isSuccessful();
-                    semaphore.release();
-                }
-            });
-            semaphore.acquireUninterruptibly();
-            semaphore.release();
-            if (wasSuccessful[0]) { // Token was valid
+            if (Api.checkAuth()) { // Token was valid
                 String cargo = Api.getCargoFromToken();
                 System.out.println("Cargo: " + cargo);
 
