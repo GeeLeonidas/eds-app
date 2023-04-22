@@ -3,6 +3,7 @@ package com.example.controleestoquees;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PersistableBundle;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -40,5 +41,21 @@ public class HomeFuncionarioActivity extends AppCompatActivity {
     public void onPostCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onPostCreate(savedInstanceState, persistentState);
         itemArrayAdapter.notifyDataSetChanged();
+
+        Activity activity = this;
+        Handler handler = new Handler();
+        Runnable update = new Runnable() {
+            @Override
+            public void run() {
+                if (!activity.isDestroyed()) {
+                    Api.updateItemArray();
+                    itemArrayAdapter.notifyDataSetChanged();
+                }
+
+                if (!activity.isDestroyed())
+                    handler.postDelayed(this, 30_000);
+            }
+        };
+        handler.postDelayed(update, 30_000);
     }
 }
