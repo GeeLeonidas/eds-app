@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +22,7 @@ public class HomeAdmActivity extends AppCompatActivity {
     private EditText etxBuscar;
     private ListView listProdutos;
     private ArrayAdapter<ProductItem> itemArrayAdapter;
+    private final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +47,12 @@ public class HomeAdmActivity extends AppCompatActivity {
 
         etxBuscar.addTextChangedListener(new SearchWatcher(() -> {
             System.out.println("Usuário parou de digitar!");
+            handler.post(() -> itemArrayAdapter.getFilter().filter(etxBuscar.getText()));
         }));
+
+        listProdutos.setOnItemClickListener((parent, view, position, id) -> {
+            System.out.println("Usuário clicou no item " + id);
+        });
 
         Api.updateItemArray();
 
@@ -57,7 +66,6 @@ public class HomeAdmActivity extends AppCompatActivity {
         itemArrayAdapter.notifyDataSetChanged();
 
         Activity activity = this;
-        Handler handler = new Handler();
         Runnable update = new Runnable() {
             @Override
             public void run() {

@@ -17,6 +17,7 @@ public class HomeFuncionarioActivity extends AppCompatActivity {
     private EditText etxBuscar;
     private ListView listProdutos;
     private ArrayAdapter<ProductItem> itemArrayAdapter;
+    private final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,12 @@ public class HomeFuncionarioActivity extends AppCompatActivity {
 
         etxBuscar.addTextChangedListener(new SearchWatcher(() -> {
             System.out.println("Usuário parou de digitar!");
+            handler.post(() -> itemArrayAdapter.getFilter().filter(etxBuscar.getText()));
         }));
+
+        listProdutos.setOnItemClickListener((parent, view, position, id) -> {
+            System.out.println("Usuário clicou no item " + id);
+        });
 
         Api.updateItemArray();
 
@@ -43,7 +49,6 @@ public class HomeFuncionarioActivity extends AppCompatActivity {
         itemArrayAdapter.notifyDataSetChanged();
 
         Activity activity = this;
-        Handler handler = new Handler();
         Runnable update = new Runnable() {
             @Override
             public void run() {
