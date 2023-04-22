@@ -125,6 +125,8 @@ public class Api {
     }
 
     public static void updateItemArray()  {
+        Semaphore semaphore = new Semaphore(1);
+        semaphore.acquireUninterruptibly();
         Api.get("api/itens", new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -148,8 +150,11 @@ public class Api {
                 } else {
                     System.out.println("Tudo errado: " + response);
                 }
+                semaphore.release();
             }
         });
+        semaphore.acquireUninterruptibly();
+        semaphore.release();
     }
 
     public static String getCargoFromToken(){

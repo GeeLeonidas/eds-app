@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
+import java.util.concurrent.Semaphore;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -69,6 +70,8 @@ public class CadastroProdutoActivity extends AppCompatActivity {
                 etxAlertQtdPrateleira.clearFocus();
                 System.out.println("Registrando produto " + name);
                 final boolean[] wasSuccessful = {false};
+                Semaphore semaphore = new Semaphore(1);
+                semaphore.acquireUninterruptibly();
                 Api.registerProduct(
                         new ProductItem(
                                 name,
@@ -89,9 +92,12 @@ public class CadastroProdutoActivity extends AppCompatActivity {
                                 } else {
                                     System.out.println("Tudo errado: " + response);
                                 }
+                                semaphore.release();
                             }
                         }
                 );
+                semaphore.acquireUninterruptibly();
+                semaphore.release();
                 if (wasSuccessful[0]) { // Success
                     etxNomeProd.getText().clear();
                     etxQtdStock.getText().clear();

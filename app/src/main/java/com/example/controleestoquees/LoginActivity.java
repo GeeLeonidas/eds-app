@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.concurrent.Semaphore;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -37,6 +39,47 @@ public class LoginActivity extends AppCompatActivity {
         etxUsuario = (EditText) findViewById(R.id.etx_usuario);
         etxSenha = (EditText) findViewById(R.id.etx_senha);
         Activity activity = this;
+
+        SharedPreferences settings = getApplicationContext().getSharedPreferences("token", 0);
+        String prefToken = settings.getString("token", "");
+
+        if (!prefToken.isEmpty()) {
+            System.out.println("Token armazenado: " + prefToken);
+            Api.setToken(prefToken);
+            boolean[] wasSuccessful = {false};
+            Semaphore semaphore = new Semaphore(1);
+            semaphore.acquireUninterruptibly();
+            Api.get("api/teste", new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) {
+                    wasSuccessful[0] = response.isSuccessful();
+                    semaphore.release();
+                }
+            });
+            semaphore.acquireUninterruptibly();
+            semaphore.release();
+            if (wasSuccessful[0]) { // Token was valid
+                String cargo = Api.getCargoFromToken();
+                System.out.println("Cargo: " + cargo);
+
+                Intent intent;
+                if (cargo.equals("administrador")) {
+                    intent = new Intent(activity, HomeAdmActivity.class);
+                } else {
+                    intent = new Intent(activity, HomeFuncionarioActivity.class);
+                }
+                startActivity(intent);
+                return;
+            } else {
+                System.out.println("Token inválido!");
+                Api.setToken("");
+            }
+        }
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +121,10 @@ public class LoginActivity extends AppCompatActivity {
                                 // E armazená-lo em uma string
                                 Api.setToken(token);
                                 System.out.println("Token: " + Api.getToken());
+
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putString("token", token);
+                                editor.commit();
 
                                 // pegando cargo do funcionario e abrindo tela home apropriada
                                 String cargo = Api.getCargoFromToken();
