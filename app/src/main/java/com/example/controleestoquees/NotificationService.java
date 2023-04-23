@@ -83,8 +83,10 @@ public class NotificationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        thread.start();
-        System.out.println("Iniciando serviço de checagem da lista!");
+        if (thread != null && !thread.isAlive()) {
+            thread.start();
+            System.out.println("Iniciando serviço de checagem da lista!");
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 
