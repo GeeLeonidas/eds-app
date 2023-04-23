@@ -37,6 +37,8 @@ public class HomeAdmActivity extends AppCompatActivity {
 
         btnUsuario.setOnClickListener(view -> {
             System.out.println("Indo para a tela de adição dos usuários!");
+            Intent intent = new Intent(activity, CadastroFuncionarioActivity.class);
+            startActivity(intent);
         });
 
         btnNovo.setOnClickListener(view -> {
