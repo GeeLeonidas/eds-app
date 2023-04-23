@@ -37,7 +37,7 @@ public class HomeFuncionarioActivity extends AppCompatActivity {
         listProdutos.setOnItemClickListener((parent, view, position, id) -> {
             Api.putCurrentItem(Api.getItemArray()[(int) id]);
             System.out.println("Usuário clicou no item " + id);
-            Intent intent = new Intent(activity, InfoProdutoAdmActivity.class);
+            Intent intent = new Intent(activity, InfoProdutoFuncionarioActivity.class);
             startActivity(intent);
         });
 
