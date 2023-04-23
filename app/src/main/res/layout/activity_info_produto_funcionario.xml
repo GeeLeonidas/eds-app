@@ -78,8 +78,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.15"
+                android:text="@string/nome_produto"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/black"
-                android:text="@string/nome_produto" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_nome_info"
@@ -87,8 +89,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.85"
                 android:background="@drawable/round_backgrd_fresh"
-                android:textColor="@color/black"
-                android:text="" />
+                android:text=""
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black" />
         </TableRow>
 
         <TableRow
@@ -101,8 +105,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.15"
+                android:text="@string/qtd_stock"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/black"
-                android:text="@string/qtd_stock" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_qtdstock_info"
@@ -110,8 +116,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.85"
                 android:background="@drawable/round_backgrd_fresh"
-                android:textColor="@color/black"
-                android:text="" />
+                android:text=""
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black" />
         </TableRow>
 
         <TableRow
@@ -124,8 +132,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.15"
+                android:text="@string/qtd_alert_stock"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/black"
-                android:text="@string/qtd_alert_stock" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_minstock_info"
@@ -133,8 +143,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.85"
                 android:background="@drawable/round_backgrd_fresh"
-                android:textColor="@color/black"
-                android:text="" />
+                android:text=""
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black" />
         </TableRow>
 
         <TableRow
@@ -147,8 +159,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.15"
+                android:text="@string/qtd_prateleira"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/black"
-                android:text="@string/qtd_prateleira" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_qtdprateleira_info"
@@ -156,8 +170,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.85"
                 android:background="@drawable/round_backgrd_fresh"
-                android:textColor="@color/black"
-                android:text="" />
+                android:text=""
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black" />
         </TableRow>
 
         <TableRow
@@ -170,8 +186,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.15"
+                android:text="@string/qtd_alert_prateleira"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/black"
-                android:text="@string/qtd_alert_prateleira" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_minprateleira_info"
@@ -179,8 +197,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.85"
                 android:background="@drawable/round_backgrd_fresh"
-                android:textColor="@color/black"
-                android:text="" />
+                android:text=""
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black" />
         </TableRow>
     </TableLayout>
 
