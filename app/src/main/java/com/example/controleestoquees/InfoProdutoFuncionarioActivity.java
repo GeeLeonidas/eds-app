@@ -52,7 +52,7 @@ public class InfoProdutoFuncionarioActivity extends AppCompatActivity {
 
         btnVoltar.setOnClickListener(view -> {
             System.out.println("Voltando à tela Home...");
-            Intent intent = new Intent(activity, HomeAdmActivity.class);
+            Intent intent = new Intent(activity, HomeFuncionarioActivity.class);
             startActivity(intent);
         });
     }
