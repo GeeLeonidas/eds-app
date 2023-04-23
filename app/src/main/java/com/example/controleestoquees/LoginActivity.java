@@ -3,7 +3,10 @@ package com.example.controleestoquees;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -15,6 +18,7 @@ import android.widget.Toast;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.concurrent.Semaphore;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -26,7 +30,7 @@ import com.google.gson.Gson;
 public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
     private EditText etxUsuario, etxSenha;
-
+    private SharedPreferences settings;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +38,12 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btn_login);
         etxUsuario = (EditText) findViewById(R.id.etx_usuario);
         etxSenha = (EditText) findViewById(R.id.etx_senha);
+
+        settings = getApplicationContext().getSharedPreferences("token", 0);
+        Activity activity = this;
+
+        // DISABLED BECAUSE OF ITS INSTABILITY
+        // useTokenFromCache();
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,10 +63,15 @@ public class LoginActivity extends AppCompatActivity {
                     toast.setGravity(Gravity.NO_GRAVITY, 0, 0);
                     toast.show();
                 }else {
+                    etxUsuario.clearFocus();
+                    etxSenha.clearFocus();
+                    Semaphore loginSemaphore = new Semaphore(1);
+                    loginSemaphore.acquireUninterruptibly();
                     Api.login(usuario, senha, new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
                             e.printStackTrace();
+                            loginSemaphore.release();
                         }
 
                         @Override
@@ -74,16 +89,31 @@ public class LoginActivity extends AppCompatActivity {
                                 Api.setToken(token);
                                 System.out.println("Token: " + Api.getToken());
 
+
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putString("token", token);
+                                editor.commit();
+
                                 // pegando cargo do funcionario e abrindo tela home apropriada
-                                String cargo = Api.getCargoFromToken(token);
+                                String cargo = Api.getCargoFromToken();
                                 System.out.println("Cargo: " + cargo); // apagar
 
+                                Intent intent;
+                                if (cargo.equals("administrador")) {
+                                    intent = new Intent(activity, HomeAdmActivity.class);
+                                } else {
+                                    intent = new Intent(activity, HomeFuncionarioActivity.class);
+                                }
+                                startActivity(intent);
                             } else {
                                 // Tratar o erro de resposta
-                                System.out.println("Tudo errado");
+                                System.out.println("Tudo errado: " + response);
                             }
+                            loginSemaphore.release();
                         }
                     });
+                    loginSemaphore.acquireUninterruptibly();
+                    loginSemaphore.release();
 
                     /*Api.get("api/teste", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjN2RjNGFjMS1kY2I1LTExZWQtODZkNC1kODVlZDNmMDg0NDciLCJjYXJnbyI6ImdlcmVudGUiLCJpYXQiOjE2ODE4NjkwMjYsImV4cCI6MTY4MTkxMjIyNn0.Sz20B5G8swNQzE8dOmQhp66PCT1vHfvfV7HXRc1TTFA", new Callback() {
                         @Override
@@ -163,12 +193,38 @@ public class LoginActivity extends AppCompatActivity {
 
         try {
             //String response = Api.get("https://www.example.com");
-            new HttpTask().execute("http://192.168.0.7:8000");
-            System.out.println("Tudo certo");
+            AsyncTask<String, Void, String> resultTask = new HttpTask().execute(Api.getBaseUrl());
+            String result = resultTask.get();
+            System.out.println("Tudo certo: " + result);
             // Faça algo com a resposta do servidor
         } catch (Exception e) {
             // Trate exceções de rede
             System.out.println("Tudo errado");
+        }
+    }
+
+    private void useTokenFromCache() {
+        String prefToken = settings.getString("token", "");
+
+        if (!prefToken.isEmpty()) {
+            System.out.println("Token armazenado: " + prefToken);
+            Api.setToken(prefToken);
+            if (Api.checkAuth()) { // Token was valid
+                String cargo = Api.getCargoFromToken();
+                System.out.println("Cargo: " + cargo);
+
+                Intent intent;
+                if (cargo.equals("administrador")) {
+                    intent = new Intent(this, HomeAdmActivity.class);
+                } else {
+                    intent = new Intent(this, HomeFuncionarioActivity.class);
+                }
+                startActivity(intent);
+                return;
+            } else {
+                System.out.println("Token inválido!");
+                Api.setToken("");
+            }
         }
     }
 
