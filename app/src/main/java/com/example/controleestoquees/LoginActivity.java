@@ -30,7 +30,7 @@ import com.google.gson.Gson;
 public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
     private EditText etxUsuario, etxSenha;
-
+    private SharedPreferences settings;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,31 +38,12 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btn_login);
         etxUsuario = (EditText) findViewById(R.id.etx_usuario);
         etxSenha = (EditText) findViewById(R.id.etx_senha);
+
+        settings = getApplicationContext().getSharedPreferences("token", 0);
         Activity activity = this;
 
-        SharedPreferences settings = getApplicationContext().getSharedPreferences("token", 0);
-        String prefToken = settings.getString("token", "");
-
-        if (!prefToken.isEmpty() && false) { // TOKEN CACHING DISABLED
-            System.out.println("Token armazenado: " + prefToken);
-            Api.setToken(prefToken);
-            if (Api.checkAuth()) { // Token was valid
-                String cargo = Api.getCargoFromToken();
-                System.out.println("Cargo: " + cargo);
-
-                Intent intent;
-                if (cargo.equals("administrador")) {
-                    intent = new Intent(activity, HomeAdmActivity.class);
-                } else {
-                    intent = new Intent(activity, HomeFuncionarioActivity.class);
-                }
-                startActivity(intent);
-                return;
-            } else {
-                System.out.println("Token inválido!");
-                Api.setToken("");
-            }
-        }
+        // DISABLED BECAUSE OF ITS INSTABILITY
+        // useTokenFromCache();
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                                 // E armazená-lo em uma string
                                 Api.setToken(token);
                                 System.out.println("Token: " + Api.getToken());
+
 
                                 SharedPreferences.Editor editor = settings.edit();
                                 editor.putString("token", token);
@@ -218,6 +200,31 @@ public class LoginActivity extends AppCompatActivity {
         } catch (Exception e) {
             // Trate exceções de rede
             System.out.println("Tudo errado");
+        }
+    }
+
+    private void useTokenFromCache() {
+        String prefToken = settings.getString("token", "");
+
+        if (!prefToken.isEmpty()) {
+            System.out.println("Token armazenado: " + prefToken);
+            Api.setToken(prefToken);
+            if (Api.checkAuth()) { // Token was valid
+                String cargo = Api.getCargoFromToken();
+                System.out.println("Cargo: " + cargo);
+
+                Intent intent;
+                if (cargo.equals("administrador")) {
+                    intent = new Intent(this, HomeAdmActivity.class);
+                } else {
+                    intent = new Intent(this, HomeFuncionarioActivity.class);
+                }
+                startActivity(intent);
+                return;
+            } else {
+                System.out.println("Token inválido!");
+                Api.setToken("");
+            }
         }
     }
 
