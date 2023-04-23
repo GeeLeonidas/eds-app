@@ -3,10 +3,12 @@ package com.example.controleestoquees;
 import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +29,7 @@ public class Api {
 
     private static ProductItem[] itemArray = {};
     private static Semaphore updateSemaphore = new Semaphore(1);
+    private static ProductItem currentItem;
 
 
     /*public static String get(String url) throws IOException {
@@ -203,6 +206,44 @@ public class Api {
         } catch (Exception e){
             throw new RuntimeException(e);
         }
+    }
+
+    public static void removeItemFromDatabase(ProductItem item, Callback callback) {
+        if (item.id == null) {
+            System.out.println("ID de produto inválido!");
+            return;
+        }
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .build();
+
+        String url = BASE_URL + "api/deletarItem";
+
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, item.toJson());
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + Api.token) // Adicionar o token na autorização
+                .delete(body)
+                .build();
+
+        Call call = client.newCall(request);
+        call.enqueue(callback);
+    }
+
+    public static void putCurrentItem(ProductItem item) {
+        currentItem = item;
+    }
+
+    public static ProductItem popCurrentItem() {
+        assert currentItem != null;
+        ProductItem result = currentItem;
+        currentItem = null;
+        return result;
     }
 
     public static void setToken(String token){

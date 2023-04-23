@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Locale;
 
 public class ProductItem {
+    public final Integer id;
     @SerializedName("nome")
     public final String name;
     @SerializedName("qtd")
@@ -20,6 +21,16 @@ public class ProductItem {
     public final int countStandAlert;
 
     public ProductItem(String name, int countStock, int countStockAlert, int countStand, int countStandAlert) {
+        this.id = null;
+        this.name = name;
+        this.countStock = countStock;
+        this.countStockAlert = countStockAlert;
+        this.countStand = countStand;
+        this.countStandAlert = countStandAlert;
+    }
+
+    public ProductItem(int id, String name, int countStock, int countStockAlert, int countStand, int countStandAlert) {
+        this.id = id;
         this.name = name;
         this.countStock = countStock;
         this.countStockAlert = countStockAlert;
