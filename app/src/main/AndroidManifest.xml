@@ -20,6 +20,12 @@
             android:name=".NotificationService"
             android:exported="false" />
         <activity
+            android:name=".InfoProdutoFuncionarioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".InfoProdutoAdmActivity"
+            android:exported="false" />
+        <activity
             android:name=".CadastroProdutoActivity"
             android:exported="false" />
         <activity
