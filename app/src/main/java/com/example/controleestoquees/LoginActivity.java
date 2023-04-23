@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences settings = getApplicationContext().getSharedPreferences("token", 0);
         String prefToken = settings.getString("token", "");
 
-        if (!prefToken.isEmpty()) {
+        if (!prefToken.isEmpty() && false) { // TOKEN CACHING DISABLED
             System.out.println("Token armazenado: " + prefToken);
             Api.setToken(prefToken);
             if (Api.checkAuth()) { // Token was valid
