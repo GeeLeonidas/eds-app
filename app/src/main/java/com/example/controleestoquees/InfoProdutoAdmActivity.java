@@ -53,11 +53,7 @@ public class InfoProdutoAdmActivity extends AppCompatActivity {
         handler = new Handler();
         Activity activity = this;
 
-        tvNomeInfo.setText(currentItem.name);
-        tvQtdStockInfo.setText(String.valueOf(currentItem.countStock));
-        tvMinStockInfo.setText(String.valueOf(currentItem.countStockAlert));
-        tvQtdPrateleiraInfo.setText(String.valueOf(currentItem.countStand));
-        tvMinPrateleiraInfo.setText(String.valueOf(currentItem.countStandAlert));
+        updateTextViewFields();
 
         btnDeletar.setOnClickListener(view -> {
             System.out.println("Deletando o item \"" + currentItem.name + "\"");
@@ -93,6 +89,8 @@ public class InfoProdutoAdmActivity extends AppCompatActivity {
 
         btnPegar.setOnClickListener(view -> {
             System.out.println("Pegando uma unidade de \"" + currentItem.name + "\"");
+            currentItem = Api.addCount(currentItem, -1, 1);
+            updateTextViewFields();
         });
 
         btnAlterar.setOnClickListener(view -> {
@@ -101,6 +99,8 @@ public class InfoProdutoAdmActivity extends AppCompatActivity {
 
         btnRepor.setOnClickListener(view -> {
             System.out.println("Repondo uma unidade de \"" + currentItem.name + "\"");
+            currentItem = Api.addCount(currentItem, 1, 0);
+            updateTextViewFields();
         });
 
         btnVoltar.setOnClickListener(view -> {
@@ -108,5 +108,13 @@ public class InfoProdutoAdmActivity extends AppCompatActivity {
             Intent intent = new Intent(activity, HomeAdmActivity.class);
             startActivity(intent);
         });
+    }
+
+    private void updateTextViewFields() {
+        tvNomeInfo.setText(currentItem.name);
+        tvQtdStockInfo.setText(String.valueOf(currentItem.countStock));
+        tvMinStockInfo.setText(String.valueOf(currentItem.countStockAlert));
+        tvQtdPrateleiraInfo.setText(String.valueOf(currentItem.countStand));
+        tvMinPrateleiraInfo.setText(String.valueOf(currentItem.countStandAlert));
     }
 }

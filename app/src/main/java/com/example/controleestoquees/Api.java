@@ -30,6 +30,7 @@ public class Api {
     private static ProductItem[] itemArray = {};
     private static Semaphore updateSemaphore = new Semaphore(1);
     private static ProductItem currentItem;
+    private static final HashMap<Integer, ProductItem> itemMap = new HashMap<>();
 
 
     /*public static String get(String url) throws IOException {
@@ -146,6 +147,9 @@ public class Api {
                         if (!responseBody.isEmpty()) {
                             Gson gson = new Gson();
                             itemArray = gson.fromJson(responseBody, ProductItem[].class);
+                            itemMap.clear();
+                            for (ProductItem item : itemArray)
+                                itemMap.put(item.id, item);
                         } else {
                             System.out.println("Body vazio");
                         }
@@ -244,6 +248,83 @@ public class Api {
         ProductItem result = currentItem;
         currentItem = null;
         return result;
+    }
+
+    public static void modifyItem(ProductItem newItem, Callback callback) {
+        if (newItem.id == null || !itemMap.containsKey(newItem.id)) {
+            System.out.println("ID de produto inválido!");
+            return;
+        }
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .build();
+
+        String url = BASE_URL + "api/atualizarItem";
+
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, newItem.toJson());
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + Api.token) // Adicionar o token na autorização
+                .put(body)
+                .build();
+
+        Call call = client.newCall(request);
+        call.enqueue(callback);
+    }
+
+    public static ProductItem addCount(ProductItem item, int stock, int stand) {
+        updateItemArray();
+        if (itemMap.containsKey(item.id)) {
+            ProductItem storedItem = itemMap.get(item.id);
+            assert storedItem != null;
+            int stockDiff = storedItem.countStock - item.countStock;
+            int standDiff = storedItem.countStand - item.countStand;
+
+            if (stockDiff != stock) {
+                stock += stockDiff;
+            } else {
+                stock = 0;
+            }
+            if (standDiff != stand) {
+                stand += standDiff;
+            } else {
+                stand = 0;
+            }
+
+            if (stock == 0 && stand == 0)
+                return item;
+
+            ProductItem newItem = new ProductItem(
+                    storedItem.id,
+                    storedItem.name,
+                    storedItem.countStock + stock,
+                    storedItem.countStockAlert,
+                    storedItem.countStand + stand,
+                    storedItem.countStandAlert
+            );
+            modifyItem(newItem, new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) {
+                    if (!response.isSuccessful()) {
+                        System.out.println("Tudo errado: " + response);
+                    }
+                }
+            });
+
+            return newItem;
+        }
+
+        return item;
     }
 
     public static void setToken(String token){
