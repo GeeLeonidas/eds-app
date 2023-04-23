@@ -48,6 +48,17 @@ public class ProductItem {
         return gson.fromJson(json, ProductItem.class);
     }
 
+    public ProductItem withId(int id) {
+        return new ProductItem(
+                id,
+                name,
+                countStock,
+                countStockAlert,
+                countStand,
+                countStandAlert
+        );
+    }
+
     @NonNull
     @Override
     public String toString() {

@@ -95,6 +95,9 @@ public class InfoProdutoAdmActivity extends AppCompatActivity {
 
         btnAlterar.setOnClickListener(view -> {
             System.out.println("Alterando o item \"" + currentItem.name + "\"");
+            Api.putCurrentItem(currentItem);
+            Intent intent = new Intent(activity, CadastroProdutoActivity.class);
+            startActivity(intent);
         });
 
         btnRepor.setOnClickListener(view -> {

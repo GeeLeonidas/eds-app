@@ -250,6 +250,10 @@ public class Api {
         return result;
     }
 
+    public static boolean hasCurrentItem() {
+        return currentItem != null;
+    }
+
     public static void modifyItem(ProductItem newItem, Callback callback) {
         if (newItem.id == null || !itemMap.containsKey(newItem.id)) {
             System.out.println("ID de produto inválido!");

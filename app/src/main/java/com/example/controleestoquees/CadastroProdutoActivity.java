@@ -3,6 +3,7 @@ package com.example.controleestoquees;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,8 @@ public class CadastroProdutoActivity extends AppCompatActivity {
 
     private Button btnVoltar, btnSalvarCad;
     private EditText etxNomeProd, etxQtdStock, etxQtdAlertStock, etxQtdPrateleira, etxAlertQtdPrateleira;
+    private ProductItem currentItem;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +38,24 @@ public class CadastroProdutoActivity extends AppCompatActivity {
         etxQtdPrateleira = findViewById(R.id.etx_qtd_prateleira);
         etxAlertQtdPrateleira = findViewById(R.id.etx_alert_qtd_prateleira);
 
+        if (Api.hasCurrentItem()) {
+            currentItem = Api.popCurrentItem();
+            updateTextViewFields();
+        }
+        handler = new Handler();
         Activity activity = this;
 
         btnVoltar.setOnClickListener(view -> {
-            System.out.println("Voltando para o Home Administrador...");
-            Intent intent = new Intent(activity, HomeAdmActivity.class);
-            startActivity(intent);
+            if (currentItem == null) {
+                System.out.println("Voltando para o Home Administrador...");
+                Intent intent = new Intent(activity, HomeAdmActivity.class);
+                startActivity(intent);
+            } else {
+                System.out.println("Voltando para tela de detalhes do administrador...");
+                Api.putCurrentItem(currentItem);
+                Intent intent = new Intent(activity, InfoProdutoAdmActivity.class);
+                startActivity(intent);
+            }
         });
         btnSalvarCad.setOnClickListener(view -> {
             System.out.println("Salvando produto...");
@@ -54,7 +69,6 @@ public class CadastroProdutoActivity extends AppCompatActivity {
             if (name.trim().isEmpty()) {
                 errorToast = Toast.makeText(activity, "Por favor, insira um nome para o produto", Toast.LENGTH_LONG);
             } else if (countStock.trim().isEmpty()) {
-                System.out.println(countStock);
                 errorToast = Toast.makeText(activity, "Por favor, insira a quantidade em estoque", Toast.LENGTH_LONG);
             } else if (countStockAlert.trim().isEmpty()) {
                 errorToast = Toast.makeText(activity, "Por favor, insira um alerta para o estoque", Toast.LENGTH_LONG);
@@ -68,18 +82,51 @@ public class CadastroProdutoActivity extends AppCompatActivity {
                 etxQtdAlertStock.clearFocus();
                 etxQtdPrateleira.clearFocus();
                 etxAlertQtdPrateleira.clearFocus();
+                ProductItem item = new ProductItem(
+                        name,
+                        Integer.parseInt(countStock),
+                        Integer.parseInt(countStockAlert),
+                        Integer.parseInt(countStand),
+                        Integer.parseInt(countStandAlert)
+                );
+                if (currentItem != null) {
+                    ProductItem modifiedItem = item.withId(currentItem.id);
+                    System.out.println("Modificando produto " + currentItem.name);
+                    Api.modifyItem(modifiedItem, new Callback() {
+                        @Override
+                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        @Override
+                        public void onResponse(@NonNull Call call, @NonNull Response response) {
+                            if (response.isSuccessful()) {
+                                handler.post(() -> {
+                                    Toast successToast = Toast.makeText(activity, "Produto \"" + name + "\" modificado com sucesso!", Toast.LENGTH_LONG);
+                                    successToast.setGravity(Gravity.NO_GRAVITY, 0, 0);
+                                    successToast.show();
+                                    System.out.println("Voltando à tela de detalhes do administrador...");
+                                    Api.putCurrentItem(modifiedItem);
+                                    Intent intent = new Intent(activity, InfoProdutoAdmActivity.class);
+                                    startActivity(intent);
+                                });
+                            } else {
+                                System.out.println("Tudo errado: " + response);
+                                handler.post(() -> {
+                                    Toast failureToast = Toast.makeText(activity, "Falha na modificação do produto", Toast.LENGTH_LONG);
+                                    failureToast.setGravity(Gravity.NO_GRAVITY, 0, 0);
+                                    failureToast.show();
+                                });
+                            }
+                        }
+                    });
+                    return;
+                }
                 System.out.println("Registrando produto " + name);
                 final boolean[] wasSuccessful = {false};
                 Semaphore semaphore = new Semaphore(1);
                 semaphore.acquireUninterruptibly();
-                Api.registerProduct(
-                        new ProductItem(
-                                name,
-                                Integer.parseInt(countStock),
-                                Integer.parseInt(countStockAlert),
-                                Integer.parseInt(countStand),
-                                Integer.parseInt(countStandAlert)
-                        ), new Callback() {
+                Api.registerProduct(item, new Callback() {
                             @Override
                             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                                 e.printStackTrace();
@@ -108,9 +155,9 @@ public class CadastroProdutoActivity extends AppCompatActivity {
                     successToast.setGravity(Gravity.NO_GRAVITY, 0, 0);
                     successToast.show();
                 } else { // Error
-                    Toast successToast = Toast.makeText(activity, "Falha na criação do produto", Toast.LENGTH_LONG);
-                    successToast.setGravity(Gravity.NO_GRAVITY, 0, 0);
-                    successToast.show();
+                    Toast failureToast = Toast.makeText(activity, "Falha na criação do produto", Toast.LENGTH_LONG);
+                    failureToast.setGravity(Gravity.NO_GRAVITY, 0, 0);
+                    failureToast.show();
                 }
                 return;
             }
@@ -120,12 +167,11 @@ public class CadastroProdutoActivity extends AppCompatActivity {
 
     }
 
-    private static boolean isInteger(String input) {
-        try {
-            Integer.parseInt(input);
-            return true;
-        } catch (NumberFormatException ex) {
-            return false;
-        }
+    private void updateTextViewFields() {
+        etxNomeProd.setText(currentItem.name);
+        etxQtdStock.setText(String.valueOf(currentItem.countStock));
+        etxQtdAlertStock.setText(String.valueOf(currentItem.countStockAlert));
+        etxQtdPrateleira.setText(String.valueOf(currentItem.countStand));
+        etxAlertQtdPrateleira.setText(String.valueOf(currentItem.countStandAlert));
     }
 }
