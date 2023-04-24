@@ -9,6 +9,7 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -30,7 +31,7 @@ public class Api {
     private static ProductItem[] itemArray = {};
     private static Semaphore updateSemaphore = new Semaphore(1);
     private static ProductItem currentItem;
-    private static final HashMap<String, ProductItem> itemMap = new HashMap<>();
+    private static final HashMap<UUID, ProductItem> itemMap = new HashMap<>();
 
 
     /*public static String get(String url) throws IOException {
