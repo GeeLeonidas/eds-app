@@ -30,7 +30,7 @@ public class Api {
     private static ProductItem[] itemArray = {};
     private static Semaphore updateSemaphore = new Semaphore(1);
     private static ProductItem currentItem;
-    private static final HashMap<Integer, ProductItem> itemMap = new HashMap<>();
+    private static final HashMap<String, ProductItem> itemMap = new HashMap<>();
 
 
     /*public static String get(String url) throws IOException {

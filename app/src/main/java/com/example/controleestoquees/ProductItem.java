@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Locale;
 
 public class ProductItem {
-    public final Integer id;
+    public final String id;
     @SerializedName("nome")
     public final String name;
     @SerializedName("qtd")
@@ -29,7 +29,7 @@ public class ProductItem {
         this.countStandAlert = countStandAlert;
     }
 
-    public ProductItem(int id, String name, int countStock, int countStockAlert, int countStand, int countStandAlert) {
+    public ProductItem(String id, String name, int countStock, int countStockAlert, int countStand, int countStandAlert) {
         this.id = id;
         this.name = name;
         this.countStock = countStock;
@@ -48,7 +48,7 @@ public class ProductItem {
         return gson.fromJson(json, ProductItem.class);
     }
 
-    public ProductItem withId(int id) {
+    public ProductItem withId(String id) {
         return new ProductItem(
                 id,
                 name,
