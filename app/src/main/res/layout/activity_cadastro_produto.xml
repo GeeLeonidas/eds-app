@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fresh_air"
+    tools:context=".CadastroProdutoActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_horizontal1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/usafa_blue"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline_horizontal1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_vertical1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.06"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_vertical2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_percent="0.94" />
+
+    <Button
+        android:id="@+id/btn_voltar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_backgrd_white"
+        android:text="@string/voltar"
+        android:textColor="@color/black_olive"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_horizontal1"
+        app:layout_constraintStart_toEndOf="@+id/guideline_vertical1"
+        app:layout_constraintTop_toTopOf="@+id/view" />
+
+    <EditText
+        android:id="@+id/etx_nome_prod"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_backgrd_white"
+        android:ems="10"
+        android:hint="@string/nome_produto"
+        android:inputType="text"
+        android:padding="12dp"
+        android:textColor="@color/black_olive"
+        app:layout_constraintBottom_toTopOf="@+id/etx_qtd_stock"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical2"
+        app:layout_constraintStart_toStartOf="@+id/guideline_vertical1"
+        app:layout_constraintTop_toBottomOf="@+id/view" />
+
+    <EditText
+        android:id="@+id/etx_qtd_stock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_backgrd_white"
+        android:ems="10"
+        android:hint="@string/qtd_stock"
+        android:inputType="number"
+        android:padding="12dp"
+        android:textColor="@color/black_olive"
+        app:layout_constraintBottom_toTopOf="@+id/etx_qtd_alert_stock"
+        app:layout_constraintEnd_toEndOf="@+id/etx_nome_prod"
+        app:layout_constraintStart_toStartOf="@+id/etx_nome_prod"
+        app:layout_constraintTop_toBottomOf="@+id/etx_nome_prod" />
+
+    <EditText
+        android:id="@+id/etx_qtd_alert_stock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_backgrd_white"
+        android:ems="10"
+        android:hint="@string/qtd_alert_stock"
+        android:inputType="number"
+        android:padding="12dp"
+        android:textColor="@color/black_olive"
+        app:layout_constraintBottom_toTopOf="@+id/etx_qtd_prateleira"
+        app:layout_constraintEnd_toEndOf="@+id/etx_qtd_stock"
+        app:layout_constraintStart_toStartOf="@+id/etx_qtd_stock"
+        app:layout_constraintTop_toBottomOf="@+id/etx_qtd_stock" />
+
+    <EditText
+        android:id="@+id/etx_qtd_prateleira"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_backgrd_white"
+        android:ems="10"
+        android:hint="@string/qtd_prateleira"
+        android:inputType="number"
+        android:padding="12dp"
+        android:textColor="@color/black_olive"
+        app:layout_constraintBottom_toTopOf="@+id/etx_alert_qtd_prateleira"
+        app:layout_constraintEnd_toEndOf="@+id/etx_qtd_alert_stock"
+        app:layout_constraintStart_toStartOf="@+id/etx_qtd_alert_stock"
+        app:layout_constraintTop_toBottomOf="@+id/etx_qtd_alert_stock" />
+
+    <EditText
+        android:id="@+id/etx_alert_qtd_prateleira"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_backgrd_white"
+        android:ems="10"
+        android:hint="@string/qtd_alert_prateleira"
+        android:inputType="number"
+        android:padding="12dp"
+        android:textColor="@color/black_olive"
+        app:layout_constraintBottom_toTopOf="@+id/btn_salvar_cad"
+        app:layout_constraintEnd_toEndOf="@+id/etx_qtd_prateleira"
+        app:layout_constraintStart_toStartOf="@+id/etx_qtd_prateleira"
+        app:layout_constraintTop_toBottomOf="@+id/etx_qtd_prateleira" />
+
+    <Button
+        android:id="@+id/btn_salvar_cad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_backgrd_dollar"
+        android:text="@string/salvar"
+        android:textColor="@color/white"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_horizontal2"
+        app:layout_constraintEnd_toEndOf="@+id/etx_alert_qtd_prateleira"
+        app:layout_constraintTop_toBottomOf="@+id/etx_alert_qtd_prateleira" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_horizontal2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.85" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

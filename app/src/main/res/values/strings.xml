@@ -4,4 +4,19 @@
     <string name="usuario">Usuário</string>
     <string name="senha">Senha</string>
     <string name="login">Login</string>
+    <string name="buscar">Buscar</string>
+    <string name="novo">Novo</string>
+    <string name="voltar">Voltar</string>
+    <string name="nome">Nome</string>
+    <string name="cargo">Cargo</string>
+    <string name="salvar">Salvar</string>
+    <string name="nome_produto">Nome produto</string>
+    <string name="qtd_stock">Qtd estoque</string>
+    <string name="qtd_alert_stock">Min estoque</string>
+    <string name="qtd_prateleira">Qtd prateleira</string>
+    <string name="qtd_alert_prateleira">Min prateleira</string>
+    <string name="deletar">Deletar</string>
+    <string name="alterar">Alterar</string>
+    <string name="pegar">Pegar</string>
+    <string name="repor">Repor</string>
 </resources>
